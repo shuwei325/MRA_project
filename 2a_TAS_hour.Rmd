@@ -1,5 +1,5 @@
 ---
-title: "PR Descriptive Time Series analysis by location"
+title: "TAS Descriptive Time Series analysis by location"
 author: "Shu Wei"
 date: "5/12/2020"
 output: html_document
@@ -28,18 +28,18 @@ library(astsa)
 Reading data
 
 ```{r}
-load(file ="pr_hour.Rdata")
+load(file ="tas_hour.Rdata")
 str(datos)
 time<-as.numeric(row.names(datos))
 ```
 
-# PR Descriptive: Time Series analysis by location
+# TAS Descriptive: Time Series analysis by location
 
 There are 144 x-coordinates and 115 y-coordinates. We select 9 locations:
 
 ```{r}
 #set 9 locations (approximately)
-load(file ="pr_hour.Rdata")
+load(file ="tas_hour.Rdata")
 str(datos)
 time<-as.numeric(row.names(datos))
 ```
@@ -146,37 +146,6 @@ wt.image(my.w2a, color.key = "quantile", n.levels = 250,
 wt.image(my.w2b, color.key = "quantile", n.levels = 250,
          legend.params = list(lab = "wavelet power levels", mar = 4.7))
 ```
-
-
-# By day 
-
-
-```{r}
-datos.d <- datos %>% mutate(time.d=floor(time)) %>%
-  group_by(time.d) %>% summarise_each( funs(mean))
-
-names(datos.d)
-dim(datos.d)
-dim(datos)
-attach(datos.d)
-```
-
-```{r,include=FALSE}
-my.w1 <- analyze.wavelet(datos.d, "y1",loess.span = 0,
-                         dt = 1, dj = 1/250,lowerPeriod = 1,
-                         upperPeriod = 500,make.pval = TRUE, n.sim = 10)
-my.w2 <- analyze.wavelet(datos.d, "y2",loess.span = 0,
-                         dt = 1, dj = 1/250,lowerPeriod = 1,
-                         upperPeriod = 500,make.pval = TRUE, n.sim = 10)
-```
-
-```{r ,fig.width=5, fig.height=5}
-wt.image(my.w1, color.key = "quantile", n.levels = 250,
-         legend.params = list(lab = "wavelet power levels", mar = 4.7))
-wt.image(my.w2, color.key = "quantile", n.levels = 250,
-         legend.params = list(lab = "wavelet power levels", mar = 4.7))
-```
-
 
 
 

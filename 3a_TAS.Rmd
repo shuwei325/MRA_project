@@ -1,0 +1,149 @@
+---
+title: "TAS Descriptive Time Series analysis by location"
+author: "Shu Wei"
+date: "5/12/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,fig.width=3, fig.height=3)
+```
+
+```{r, include = FALSE}
+library(tidyverse)
+library(fracdiff)
+library(ggplot2)
+library(ggcorrplot)
+library(corrplot)
+library(RColorBrewer)
+library(forecast)
+library(fpp2)
+library(ggfortify)
+library(dplR)
+library(wavethresh)
+library(WaveletComp)
+library(astsa)
+```
+
+Reading data
+
+```{r}
+load(file ="tas_hour.Rdata")
+str(datos)
+time<-as.numeric(row.names(datos))
+```
+
+# TAS Descriptive: Time Series analysis by location
+
+```{r}
+#set 9 locations (approximately)
+load(file ="tas_hour.Rdata")
+str(datos)
+time<-as.numeric(row.names(datos))
+
+datos.d <- datos %>% mutate(time.d=floor(time)) %>%
+  group_by(time.d) %>% summarise_each( funs(mean))
+datos.ts<-ts(datos.d[,-1])
+```
+
+
+```{r,fig.width=5, fig.height=5}
+autoplot(datos.ts)
+autoplot(datos.ts, facets = TRUE)
+(corr<-cor(datos.ts))
+#ggcorrplot(corr)
+corrplot(corr, type="upper", order="hclust",
+         col=brewer.pal(n=8, name="RdYlBu"))
+```
+
+```{r}
+y1<-datos.ts[,"y1"]
+y2<-datos.ts[,"y2"]
+y3<-datos.ts[,"y3"]
+y4<-datos.ts[,"y4"]
+y5<-datos.ts[,"y5"]
+y6<-datos.ts[,"y6"]
+y7<-datos.ts[,"y7"]
+y8<-datos.ts[,"y8"]
+y9<-datos.ts[,"y9"]
+```
+
+
+# Autocorrelation:
+
+```{r,fig.width=6, fig.height=6}
+par(mfrow=c(3,3))
+acf(y1,lag.max=100,ci=0.95)
+acf(y2,lag.max=100,ci=0.95)
+acf(y3,lag.max=100,ci=0.95)
+acf(y4,lag.max=100,ci=0.95)
+acf(y5,lag.max=100,ci=0.95)
+acf(y6,lag.max=100,ci=0.95)
+acf(y7,lag.max=100,ci=0.95)
+acf(y8,lag.max=100,ci=0.95)
+acf(y9,lag.max=100,ci=0.95)
+```
+
+# location 1
+
+```{r,fig.width=6, fig.height=3}
+par(mfrow=c(2,3))
+ts.plot(y1)
+acf(y1,lag.max=500,ci=0.95)
+pacf(y1,lag.max=500,ci=0.95)
+ts.plot(y4)
+acf(y4,lag.max=500,ci=0.95)
+pacf(y4,lag.max=500,ci=0.95)
+```
+
+# Spectral analysis
+
+```{r,fig.width=12, fig.height=6}
+# Spectral Analysis
+par(mfrow=c(1,2))
+raw.spec1 <- spec.pgram(y1, taper = 0)
+plot(raw.spec1, log = "no")
+raw.spec4 <- spec.pgram(y4, taper = 0)
+plot(raw.spec4, log = "no")
+
+ts.plot(datos.ts, col=1:9)
+spec = mvspec(datos.ts, spans=c(3,3), taper=.1)
+
+```
+
+
+# Wavelets analysis
+
+
+
+```{r,include=FALSE}
+my.w1 <- analyze.wavelet(datos.d, "y1",loess.span = 0,
+                         dt = 1, dj = 1/250,lowerPeriod = 1,
+                         upperPeriod = 500,make.pval = TRUE, n.sim = 10)
+my.w2 <- analyze.wavelet(datos.d, "y2",loess.span = 0,
+                         dt = 1, dj = 1/250,lowerPeriod = 1,
+                         upperPeriod = 500,make.pval = TRUE, n.sim = 10)
+my.w4 <- analyze.wavelet(datos.d, "y4",loess.span = 0,
+                         dt = 1, dj = 1/250,lowerPeriod = 1,
+                         upperPeriod = 500,make.pval = TRUE, n.sim = 10)
+```
+
+
+```{r ,fig.width=5, fig.height=5}
+
+wt.image(my.w1, color.key = "quantile", n.levels = 250,
+         legend.params = list(lab = "wavelet power levels", mar = 4.7))
+wt.image(my.w2, color.key = "quantile", n.levels = 250,
+         legend.params = list(lab = "wavelet power levels", mar = 4.7))
+wt.image(my.w4, color.key = "quantile", n.levels = 250,
+         legend.params = list(lab = "wavelet power levels", mar = 4.7))
+
+```
+
+
+
+
+
+
+
+
