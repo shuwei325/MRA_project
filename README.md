@@ -3,17 +3,13 @@
 ## Time series descriptive analysis:
 
 
-### Regional variables:
- 1. Temperature:
-	* [hourly data](https://shuwei325.github.io/MRA_project/2a_TAS_hour.html).
-	* [monthly data](https://shuwei325.github.io/MRA_project/2a_TAS_month.html).
- 2. Precipitation:
-	* [hourly data](https://shuwei325.github.io/MRA_project/2a_PR_hour.html).
-	* [hourly data](https://shuwei325.github.io/MRA_project/2a_PR_month.html).
+### [Regional variables (daily)](https://shuwei325.github.io/MRA_project/1a_Regional_variables.html)
 
-### Regional variables (daily):
- 1. [Temperature](https://shuwei325.github.io/MRA_project/3a_TAS.html).
- 2. [Precipitation](https://shuwei325.github.io/MRA_project/3a_PR.html).
+ 1. [Specific humidity (hus)](https://shuwei325.github.io/MRA_project/1b_hus.html).
+ 2. [Precipitation flux (pr)](https://shuwei325.github.io/MRA_project/1c_pr.html).
+ 3. [Surface temperature (ts)](https://shuwei325.github.io/MRA_project/1d_ts.html).
+ 4. [Eastward wind (ua)](https://shuwei325.github.io/MRA_project/1e_ua.html).
+ 5. [Northward wind (va)](https://shuwei325.github.io/MRA_project/1f_va.html).
 
 ### Global variables (monthly):
 
